@@ -21,17 +21,25 @@ public class QueryParser {
             Database newDb = new Database(newDbName, new ArrayList<Table>());
             Server.databaseList.add(newDb);
             Server.currentDatabase = newDb;
+            Server.dbMap.put(newDbName, newDb);
             result = "Databse added : " + newDb.databaseName;
-        }
-        if (words[0] == "SHOW" && words[1] == "DATABASE" && words.length == 2) {
-            String dbName = String.valueOf(Server.databaseList.size());
+        } else if (words[0].equals("SHOW") && words[1].equals("DATABASE") && words.length == 2) {
+            String dbName = " ";
 
-            /*
-             * for (int i = 0; i < Server.databaseList.size(); i += 1) {
-             * dbName += "\n THIS" + Server.databaseList.get(i).databaseName;
-             * }
-             */
+            for (int i = 0; i < Server.databaseList.size(); i += 1) {
+                dbName += "\n" + Server.databaseList.get(i).databaseName;
+            }
             result = dbName;
+        } else if (words[0].equals("USE") && words.length == 2) {
+            try {
+                Server.currentDatabase = Server.dbMap.get(words[1]);
+                result = "SELECTED DATBASE " + Server.currentDatabase.databaseName;
+            } catch (Exception e) {
+                result = "DATABASE NOT FOUND";
+            }
+
+        } else {
+            result = "Invalid input";
         }
         return result;
     }
