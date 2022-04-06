@@ -8,33 +8,45 @@ public class Query {
     }
 
     public static String beautify(ArrayList<ArrayList<String>> result) {
-        int maxLen = getMaxLen(result);
+        ArrayList<String> lenghts = result.get(0);
+
+        result.remove(0);
         StringBuilder newResult = new StringBuilder();
 
-        newResult.append("\n+" + getBorder(maxLen * result.get(0).size() + 2 * (result.get(0).size())) + "+\n| ");
+        int wholeMaxLen = 0;
+        for (int i = 0; i < lenghts.size(); i += 1) {
+            wholeMaxLen += (3 + Integer.valueOf(lenghts.get(i)));
+        }
+        // Adding header top line
+        newResult.append("\n+" + getBorder(wholeMaxLen) + "+\n|");
+
+        // Adding columnNames row
         ArrayList<String> currentRow = result.get(0);
         for (int j = 0; j < currentRow.size(); j += 1) {
+            int maxLen = Integer.valueOf(lenghts.get(j));
             String currentString = currentRow.get(j);
-            newResult.append(currentString);
+            newResult.append(" " + currentString + " ");
             for (int k = 0; k <= maxLen - currentString.length(); k += 1)
                 newResult.append(" ");
             newResult.append("|");
         }
-        newResult.append("\n+" + getBorder(maxLen * result.get(0).size() + 2 * (result.get(0).size())) + "+\n| ");
+        // adding header bottom line
+        newResult.append("\n+" + getBorder(wholeMaxLen) + "+\n|");
 
+        // adding rows
         for (int i = 1; i < result.size(); i += 1) {
             currentRow = result.get(i);
             for (int j = 0; j < currentRow.size(); j += 1) {
+                int maxLen = Integer.valueOf(lenghts.get(j));
                 String currentString = currentRow.get(j);
-                newResult.append(currentString);
+                newResult.append(" " + currentString + " ");
                 for (int k = 0; k <= maxLen - currentString.length(); k += 1)
                     newResult.append(" ");
-                newResult.append("|\n| ");
-
+                newResult.append("|\n|");
             }
         }
-        newResult.replace(newResult.length() - 3, newResult.length(), "");
-        newResult.append("\n+" + getBorder(maxLen * result.get(0).size() + 2 * (result.get(0).size())) + "+\n");
+        newResult.replace(newResult.length() - 2, newResult.length(), "");
+        newResult.append("\n+" + getBorder(wholeMaxLen) + "+\n");
 
         String stringRes = new String(newResult);
         return stringRes;
@@ -46,18 +58,6 @@ public class Query {
             outputBuffer.append("-");
         }
         return outputBuffer.toString();
-    }
 
-    private static int getMaxLen(ArrayList<ArrayList<String>> result) {
-        int maxLen = 0;
-        for (int i = 0; i < result.size(); i += 1) {
-            ArrayList<String> currentRow = result.get(i);
-            for (int j = 0; j < currentRow.size(); j += 1) {
-                if (maxLen < currentRow.get(j).length()) {
-                    maxLen = currentRow.get(j).length();
-                }
-            }
-        }
-        return maxLen;
     }
 }

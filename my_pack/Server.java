@@ -11,16 +11,17 @@ public class Server {
 	public static Database currentDatabase;
 	private static Scanner sc = new Scanner(System.in);
 	private static QueryParser queryParser = new QueryParser(databaseList);
+	public static char delimiter = ';';
 
 	public void takeQuery() {
 		String newQuery = " ";
-		while (newQuery.charAt(newQuery.length() - 1) != ';') {
+		while (newQuery.charAt(newQuery.length() - 1) != delimiter) {
 			System.out.print("\nMySql > ");
 			newQuery += sc.nextLine();
 		}
 
 		String result = queryParser.parse(newQuery);
-		System.out.println("\n" + result);
+		System.out.println(result);
 
 		takeQuery();
 	}
