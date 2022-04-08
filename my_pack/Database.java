@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Database {
     ArrayList<Table> tableList;
+
     String databaseName;
 
     public Database(String databaseName, ArrayList<Table> tableList) {
@@ -11,8 +12,11 @@ public class Database {
         this.databaseName = databaseName;
     }
 
-    public void createTable(String tableName, Map<String, String[]> columns, String primaryKey) {
+    public void createTable(String tableName, Map<String, ArrayList<String>> columnAttributes, String primaryKey) {
         // Create a new Table add it to the tableList
+
+        Table newTable = new Table(tableName, columnAttributes);
+        this.tableList.add(newTable);
     }
 
     public ArrayList<Table> getTableList() {
