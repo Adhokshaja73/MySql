@@ -3,7 +3,8 @@ package my_pack;
 import java.util.*;
 
 public class Database {
-    ArrayList<Table> tableList;
+    public ArrayList<Table> tableList;
+    public Map<String, Integer> tableMap = new HashMap<>();
 
     String databaseName;
 
@@ -12,10 +13,15 @@ public class Database {
         this.databaseName = databaseName;
     }
 
-    public void createTable(String tableName, Map<String, ArrayList<String>> columnAttributes, String primaryKey) {
+    public void addTable(String tableName) {
+        Table newTable = new Table(tableName);
+        this.tableList.add(newTable);
+    }
+
+    public void addTable(String tableName, String primaryKey) {
         // Create a new Table add it to the tableList
 
-        Table newTable = new Table(tableName, columnAttributes);
+        Table newTable = new Table(tableName, primaryKey);
         this.tableList.add(newTable);
     }
 

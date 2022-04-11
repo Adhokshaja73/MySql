@@ -1,6 +1,7 @@
 package my_pack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Table {
@@ -8,14 +9,23 @@ public class Table {
     // col_name_2 ... )
     public String tableName;
     public String primaryKey;
-    public Map<String, ArrayList<String>> columnAttributes;
-    public ArrayList<ArrayList<String>> columns;
+    public Map<String, String> columnAttributes = new HashMap<>();
+    public ArrayList<ArrayList<String>> rows;
 
-    public Table(String tableName, Map<String, ArrayList<String>> columnAttributes) {
+    public Table(String tableName, String primaryKey) {
         this.tableName = tableName;
-
+        this.primaryKey = primaryKey;
     }
 
-    public void addColumn() {
+    public Table(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public void addColumn(String colName, String colAttr) {
+        this.columnAttributes.put(colName, colAttr);
+    }
+
+    public void insertRow() {
+
     }
 }
