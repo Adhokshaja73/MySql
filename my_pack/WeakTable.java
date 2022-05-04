@@ -3,7 +3,7 @@ package my_pack;
 import java.util.*;
 
 public class WeakTable {
-    public String tableName;
+    public final String tableName;
     public Map<String, String> columnAttributes = new HashMap<>();
     public ArrayList<ArrayList<String>> rows;
 
