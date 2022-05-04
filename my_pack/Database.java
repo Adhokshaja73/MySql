@@ -13,12 +13,12 @@ public class Database {
         this.databaseName = databaseName;
     }
 
-    public void addTable(String tableName) {
+    public void addTable(String tableName, Map<String, String> columns) {
         Table newTable = new Table(tableName);
         this.tableList.add(newTable);
     }
 
-    public void addTable(String tableName, String primaryKey) {
+    public void addTable(String tableName, String primaryKey, Map<String, String> columns) {
         // Create a new Table add it to the tableList
 
         Table newTable = new Table(tableName, primaryKey);
