@@ -1,8 +1,10 @@
 package my_pack;
 
+import java.io.IOException;
 import java.util.*;
 
 import javax.print.event.PrintEvent;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.html.HTMLDocument.RunElement;
 
 public class QueryParser {
@@ -24,6 +26,14 @@ public class QueryParser {
         if (mQuery.matches("(?i).*CREATE DATABASE [A-Za-z0-9]+.*")) {
             String newDbName = words[2];
             result = query.createDatabase(newDbName);
+            Server tempServer = new Server();
+            String filePath = "C:\\Users\\adhok\\Desktop\\MCA3\\JAVA\\MySql\\Output\\Server";
+            try {
+                FileManager.WriteObjectToFile(tempServer, filePath);
+            } catch (ClassNotFoundException | IOException e) {
+                System.out.println("Failed to save the database to storage");
+                e.printStackTrace();
+            }
         } else if (mQuery.matches("(?i).*SHOW DATABASE.*") &&
                 words.length == 2) {
             result = query.showDatabase();

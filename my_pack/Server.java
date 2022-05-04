@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.io.Serializable;
 
-public class Server {
+public class Server implements Serializable {
 	public static ArrayList<Database> databaseList = new ArrayList<>();
 	public static Map<String, Integer> dbMap = new HashMap<>();
 	public static Database currentDatabase;

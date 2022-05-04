@@ -7,6 +7,7 @@ public class Main {
     public static ArrayList<User> userList = new ArrayList<>();
 
     public static void main(String[] args) {
+        Server server;
         try {
             if (args[0].equals("--createuser")) {
                 Scanner sc = new Scanner(System.in);
@@ -27,7 +28,15 @@ public class Main {
         } catch (Exception e) {
 
         } finally {
-            Server server = new Server();
+            try {
+                server = (Server) FileManager
+                        .ReadObjectFromFile("C:\\Users\\adhok\\Desktop\\MCA3\\JAVA\\MySql\\Output\\Server");
+                System.out.println("Server loaded");
+
+            } catch (Exception e) {
+                System.out.println("Loading server failed.");
+                server = new Server();
+            }
             server.takeQuery();
         }
     }
