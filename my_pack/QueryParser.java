@@ -3,17 +3,9 @@ package my_pack;
 import java.io.IOException;
 import java.util.*;
 
-import javax.print.event.PrintEvent;
-import javax.swing.filechooser.FileSystemView;
-import javax.swing.text.html.HTMLDocument.RunElement;
-
-public class QueryParser {
+public class QueryParser extends Query {
     public ArrayList<Database> databaseList;
     public Database currentDatabase;
-
-    public Query query = new Query();
-
-    private final List<String> columnAttributes = Arrays.asList("VARCHAR", "CHAR", "INT");
 
     public QueryParser(ArrayList<Database> databaseList) {
         this.databaseList = databaseList;
@@ -25,7 +17,7 @@ public class QueryParser {
         String[] words = mQuery.split(" ");
         if (mQuery.matches("(?i).*CREATE DATABASE [A-Za-z0-9]+.*")) {
             String newDbName = words[2];
-            result = query.createDatabase(newDbName);
+            result = createDatabase(newDbName);
             Server tempServer = new Server();
             String filePath = "C:\\Users\\adhok\\Desktop\\MCA3\\JAVA\\MySql\\Output\\Server";
             try {
@@ -36,7 +28,7 @@ public class QueryParser {
             }
         } else if (mQuery.matches("(?i).*SHOW DATABASE.*") &&
                 words.length == 2) {
-            result = query.showDatabase();
+            result = showDatabase();
         } else if (mQuery.matches("(?i).*USE [A-Za-z0-9]+.*")) {
             try {
                 Server.currentDatabase = Server.databaseList.get(Server.dbMap.get(words[1]));
@@ -54,7 +46,7 @@ public class QueryParser {
             if (Server.currentDatabase == null) {
                 result = "No database selected..!";
             } else {
-                result = query.createWeakTable(mQuery);
+                result = createWeakTable(mQuery);
             }
         }
 
@@ -80,6 +72,23 @@ public class QueryParser {
                 longestLen.add(String.valueOf(maxLen));
                 tableList.add(0, longestLen);
                 result = Query.output.beautify(tableList);
+
+            }
+        } else if (mQuery.matches("(?i).*cls.*")) {
+            Query.clearConsole();
+            result = "";
+            Server newServer = new Server();
+            String filePath = "C:\\Users\\adhok\\Desktop\\MCA3\\JAVA\\MySql\\Output\\Server";
+
+            newServer.setTest("test");
+            try {
+                FileManager.WriteObjectToFile(newServer, filePath);
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         } else if (mQuery.matches("(?i).*exit.*")) {
             System.out.println("\nBye.\n");
@@ -89,5 +98,21 @@ public class QueryParser {
         }
 
         return result;
+    }
+
+    @Override
+    public String createDatabase(String newDbName) {
+        {
+            String result;
+            Database newDb = new Database(newDbName, new ArrayList<Table>());
+            if (Server.dbMap.containsKey(newDbName)) {
+                result = "Database " + newDbName + " already exists.";
+            } else {
+                Server.dbMap.put(newDbName, Server.databaseList.size());
+                Server.databaseList.add(newDb);
+                result = "Database added : " + newDb.databaseName;
+            }
+            return result;
+        }
     }
 }

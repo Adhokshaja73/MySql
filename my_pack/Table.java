@@ -1,9 +1,5 @@
 package my_pack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Table extends WeakTable {
     public String primaryKey;
 

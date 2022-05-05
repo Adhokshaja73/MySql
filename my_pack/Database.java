@@ -1,20 +1,22 @@
 package my_pack;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Database {
-    public ArrayList<Table> tableList;
+public class Database implements Serializable {
+    public ArrayList<WeakTable> tableList;
     public Map<String, Integer> tableMap = new HashMap<>();
 
     String databaseName;
 
     public Database(String databaseName, ArrayList<Table> tableList) {
-        this.tableList = new ArrayList<Table>();
+        this.tableList = new ArrayList<WeakTable>();
         this.databaseName = databaseName;
     }
 
     public void addTable(String tableName, Map<String, String> columns) {
-        Table newTable = new Table(tableName);
+        WeakTable newTable = new WeakTable(tableName);
+        this.tableMap.put(tableName, tableMap.size());
         this.tableList.add(newTable);
     }
 
@@ -22,10 +24,11 @@ public class Database {
         // Create a new Table add it to the tableList
 
         Table newTable = new Table(tableName, primaryKey);
+        this.tableMap.put(tableName, tableMap.size());
         this.tableList.add(newTable);
     }
 
-    public ArrayList<Table> getTableList() {
+    public ArrayList<WeakTable> getTableList() {
         return tableList;
     }
 

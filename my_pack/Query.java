@@ -1,42 +1,36 @@
 package my_pack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.html.HTMLDocument.RunElement;
+public abstract class Query {
+    private static String[] mCol = { "string", "int" };
+    public static final List<String> COL_ATTR_LIST = Arrays.asList(mCol);
+    // .asList({ "string", "int", "bool" });;
 
-public class Query {
-
-    public static final ArrayList<String> COL_ATTR_LIST = new ArrayList<>();
-
-    public String createDatabase(String newDbName) {
-        String result;
-        Database newDb = new Database(newDbName, new ArrayList<Table>());
-        if (Server.dbMap.containsKey(newDbName)) {
-            result = "Database " + newDbName + " already exists.";
-        } else {
-            Server.dbMap.put(newDbName, Server.databaseList.size());
-            Server.databaseList.add(newDb);
-            result = "Database added : " + newDb.databaseName;
-        }
-        return result;
-    }
+    public abstract String createDatabase(String newDbName);
 
     public String createWeakTable(String mQuery) {
         // mQuery = CREATE TABLE tableName {(colName:colType),(),()}
         String result;
         String[] spaceList = mQuery.split(" ");
-        String tableName = spaceList[3];
-        String cols = mQuery.split("[{]")[1].replaceAll("}", "").replaceAll(" ", ""); // temp = (),()
-        Map<String, String> columns = extractColumnAttributes(cols);
-
-        if (columns == null) {
-            result = "Invalid Syntax";
+        String tableName = spaceList[3].split("[{]")[0];
+        if (Server.currentDatabase.tableMap.containsKey(tableName)) {
+            result = "Table already exists";
         } else {
-            String primaryKey = "";
-            Server.currentDatabase.addTable(tableName, primaryKey, columns);
-            result = "Table created";
+            String cols = mQuery.split("[{]")[1].replaceAll("}", "").replaceAll(" ", ""); // temp = (),()
+            Map<String, String> columns = extractColumnAttributes(cols);
+
+            if (columns == null) {
+                result = "Invalid Syntax";
+            } else {
+                String primaryKey = "";
+                Server.currentDatabase.addTable(tableName, primaryKey, columns);
+                result = "New table " + tableName + " was successfully added";
+            }
         }
         return (result);
     }
@@ -56,6 +50,25 @@ public class Query {
             }
         }
         return colMap;
+    }
+
+    public static void clearConsole() {
+        try {
+            String operatingSystem = System.getProperty("os.name"); // Check the current operating system
+
+            if (operatingSystem.contains("Windows")) {
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
+                Process startProcess = pb.inheritIO().start();
+                startProcess.waitFor();
+            } else {
+                ProcessBuilder pb = new ProcessBuilder("clear");
+                Process startProcess = pb.inheritIO().start();
+
+                startProcess.waitFor();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public String showDatabase() {

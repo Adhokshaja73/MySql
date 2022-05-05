@@ -31,10 +31,11 @@ public class Main {
             try {
                 server = (Server) FileManager
                         .ReadObjectFromFile("C:\\Users\\adhok\\Desktop\\MCA3\\JAVA\\MySql\\Output\\Server");
-                System.out.println("Server loaded");
 
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Loading server failed.");
+            } finally {
                 server = new Server();
             }
             server.takeQuery();
